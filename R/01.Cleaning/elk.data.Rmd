@@ -1,0 +1,89 @@
+---
+title: "elk.data"
+author: "Kassie McCurrach"
+date: "2026-09-14"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##**Loading Packages**
+```{r}
+library(rstatix)
+library(mgcv)
+library(mgcViz)
+library(ggplot2)
+library(DHARMa)
+library(fitdistrplus)
+library(gamlss)
+library(goft)
+library(tidyverse)
+```
+
+##**Loading Data
+```{r}
+data <- read_csv("ASCCA_2026_June_August_tag_report.csv")
+
+
+make_diftime
+starts_with
+```
+
+
+##**Cleaning Data
+```{r}
+data.clean <- data %>%
+  select(location, image_date_time, species_common_name) %>%
+  filter(!str_starts(location, "1")) %>%
+  filter(species_common_name == "Elk (wapiti)") %>%
+  mutate(month = month(image_date_time), day = day(image_date_time), hour = hour(image_date_time), minute = minute(image_date_time)) %>%
+  group_by(location)
+
+```
+
+
+##**Creating Function To Caclulate Time Difference Between Photos
+```{r}
+calc_difftime <- function(data.clean) {
+  num_vec <- c()
+  new.elk.data <- tibble()
+  for(i in unique(data.clean$location)) {
+    cam_location <- data.clean %>% 
+     filter(location == i)
+    time_diffs <- tibble(time_diff = NA)
+    for(j in 1:nrow(cam_location)){
+      if(j == 1) {
+      time_diffs[j, ]$time_diff <- NA}
+      if(j>1) {
+      time_diffs [j, ]$time_diff <- 
+        cam_location[j, ]$image_date_time - 
+        cam_location[j-1, ]$image_date_time
+      }
+    }
+    print(time_diffs)
+  }
+return(new.elk.data)
+  }
+
+
+calc_difftime(data.clean)
+ 
+  
+```
+Making a Function:
+add3 <- function(input) input + 3
+add3(3)
+
+
+for(i in unique(cam_data$camera_id)) 
+cam_new <- cam_data %>% (filter == camera_ID == i)
+camdiff <- tibble(cam =i, diff_time = cam_new[i]$datetime - ) this will isolate each species or camera location
+calc_difftime <- function(data, camera)
+https://purrr.tidyverse.org/articles/purrr.html (package to do the last part of the code that levi sent)
+
+
+https://www.r-bloggers.com/2015/07/a-tutorial-on-loops-in-r-usage-and-alternatives/ (use to complete last part) (loops would be the easiest way to complete the time difference between adjacent rows) START HERE
+
+https://r4ds.had.co.nz/functions.html (how to make your own functions)
