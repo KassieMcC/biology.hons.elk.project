@@ -30,9 +30,6 @@ library(tidyverse)
 # will work for now and allow us to collaborate better.
 data <- read_csv("data/ASCCA_2026_June_August_tag_report.csv")
 
-
-make_diftime
-starts_with
 ```
 
 
@@ -102,6 +99,7 @@ for(i in unique(cam_data$camera_id))
 cam_new <- cam_data %>% (filter == camera_ID == i)
 camdiff <- tibble(cam =i, diff_time = cam_new[i]$datetime - ) this will isolate each species or camera location
 calc_difftime <- function(data, camera)
+
 https://purrr.tidyverse.org/articles/purrr.html (package to do the last part of the code that levi sent)
 
 

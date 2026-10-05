@@ -1,0 +1,62 @@
+---
+title: "Untitled"
+author: "LN"
+date: "2026-09-21"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Load packages and data
+
+```{r packages}
+# Load data
+
+# Load tidyverse
+library(tidyverse)
+
+```
+
+## Clean data
+
+```{r clean}
+# 1 - Remove all rows starting with 100EK as location
+# data %>%
+#   filter(! starts_with(location, "100EK"))
+
+# 2 - Filter rows with only elk observations 
+
+# 3 - Select only relevant columns
+```
+
+## Add dates and times
+
+```{r dates_times, echo=FALSE}
+# Add date-time columns 
+# Add hour, minute, day, month using lubridate
+
+```
+
+## Isolate cameras
+
+```{r get_cams, echo = F}
+# Isolate individual cameras (locations), e.g. "L12_ASCCA15_09_August_2026" (filter, mapping to variables)
+
+```
+
+## Figure out difference in times beween rows in the same camera
+
+```{r difftimes, echo = F}
+
+# Calculate difference in time between addjacent rows (using difftime or some analogous function in lubridate)
+#   We need to do this by iteratively applying a function (e.g., difftime) that calculates how much time has passed between adjacent rows and adding this information to a new column.
+#   Designate a new ID each time > 30 minutes has passed between adjacacent columns
+#   
+# Options:
+# 
+# - use a for-loop, from 1:n rows in data to calculate difftime of row i vs i-1
+# - make a function with inputs row i, j (= i-1) and calculate the difference within the function then apply the function across the rows of the data
+```
+
