@@ -1,0 +1,113 @@
+---
+title: "elk.data"
+author: "Kassie McCurrach"
+date: "2026-09-14"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##**Loading Packages**
+```{r}
+library(rstatix)
+library(mgcv)
+library(mgcViz)
+library(ggplot2)
+library(DHARMa)
+library(fitdistrplus)
+library(gamlss)
+library(goft)
+library(tidyverse)
+```
+
+##**Loading Data
+```{r}
+# I added a data folder to your project with 
+# the two current csv files. These might eventually
+# become too large to share via GitHub, but this
+# will work for now and allow us to collaborate better.
+data <- read_csv("data/ASCCA_2026_June_August_tag_report.csv")
+
+```
+
+
+##**Cleaning Data
+```{r}
+data.clean <- data %>%
+  select(location, image_date_time, species_common_name) %>%
+  filter(!str_starts(location, "1")) %>%
+  filter(species_common_name == "Elk (wapiti)") %>%
+  mutate(month = month(image_date_time), day = day(image_date_time), hour = hour(image_date_time), minute = minute(image_date_time)) %>%
+  group_by(location)
+
+```
+
+
+##**Creating Function To Caclulate Time Difference Between Photos
+```{r}
+# I'm making the argument more generic ("dt") so 
+# you can specify the data you want to use, which # will allow you to use it more generally. Within 
+# the function, "dt" can be anything you want.
+calc_difftime <- function(dt) {
+  # I removed the num_vec <- c() because I don't 
+  # think it's needed
+  new.elk.data <- tibble()
+  for(i in unique(dt$location)) {
+    # Here data.clean is replaced with dt, which
+    # you will specify when running the function.
+    cam_location <- dt %>% 
+     filter(location == i)
+    time_diffs <- tibble(time_diff = NA)
+    for(j in 1:nrow(cam_location)){
+      if(j == 1) {
+      time_diffs[j, ]$time_diff <- NA}
+      if(j>1) {
+      time_diffs [j, ]$time_diff <- 
+        cam_location[j, ]$image_date_time - 
+        cam_location[j-1, ]$image_date_time
+      }
+    }
+    # I'm making a new column, "location", which
+    # gets filled with i (the location)
+    time_diffs$location <- i
+    # Then I'm binding together the empty tibble
+    # (new.elk.data) with the time_diffs you 
+    # generated.
+    new.elk.data <- bind_rows(elk.data.02, time_diffs)
+  }
+  # Now the function should return a tibble with
+  # all of the time diffs labelled by location.
+return(new.elk.data)
+  }
+
+# This should now work the way you want it to.
+# This is a great function that will calculate
+# the time differences for any new tibble as we 
+# add data in the future. Great job!
+
+new.elk.data <- calc_difftime(dt = data.clean)
+# Is this correct? I was expecting an additional column with time differences to be added to my data.clean data set. 
+#My main question is if I should separate my date/times into separate columns for this new tibble so I will be able to model it and visualize it properly. Or is there a way to add the time difference column into my original data.clean data set. 
+
+write.csv(new.elk.data, "Data/clean.dt.elk.data.02.csv")
+#I downloaded this as a new data set into my Data folder and labeled it "clean.dt.elk.data.02" so i can upload it into my next rmd where I will determine the amount of time I want to pass before I record a new observation.
+  
+```
+Making a Function:
+add3 <- function(input) input + 3
+add3(3)
+
+
+for(i in unique(cam_data$camera_id)) 
+cam_new <- cam_data %>% (filter == camera_ID == i)
+camdiff <- tibble(cam =i, diff_time = cam_new[i]$datetime - ) this will isolate each species or camera location
+calc_difftime <- function(data, camera)
+
+https://purrr.tidyverse.org/articles/purrr.html (package to do the last part of the code that levi sent)
+
+
+https://www.r-bloggers.com/2015/07/a-tutorial-on-loops-in-r-usage-and-alternatives/ (use to complete last part) (loops would be the easiest way to complete the time difference between adjacent rows) START HERE
+
+https://r4ds.had.co.nz/functions.html (how to make your own functions)

@@ -1,0 +1,37 @@
+---
+title: "elk.data.02"
+author: "Kassie McCurrach"
+date: "2026-10-06"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##**Load Packages
+```{r}
+library(tidyverse)
+```
+
+##**Loading Data Made in Last Rmd
+```{r}
+data.02 <- read_csv("data/clean.dt.elk.data.02.csv")
+
+```
+
+##**Exclude Addtional Columns That the csv File Read
+```{r}
+data.02 <- data.02 %>%
+  select(time_diff,location)
+
+```
+
+##**Creating New Observations at >30 mins (1800s)
+```{r}
+new.obs <- data.02 %>%
+  group_by(location) %>%
+  mutate(new.obs = time_diff > lag(1800))
+#The results from this show no new observations as the photos were not taken more then 30 minutes (1800s) apart. However we have to account for the first photo at each location taken as they will be new observations.
+```
+
