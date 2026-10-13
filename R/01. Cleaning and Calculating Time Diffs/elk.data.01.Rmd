@@ -103,7 +103,12 @@ new.elk.data <- calc_difftime(dt = data.clean)
 # the two data frames will have image_ID in common. I also adjusted your cleaning
 # procedure to select the image_ID in your  cleanedd data.
 
-write.csv(new.elk.data, "Data/clean.dt.elk.data.02.csv")
+# Here is how that works:
+new.elk.data <- new.elk.data %>%
+  left_join(data.clean)
+
+# Changing to write_csv so R doesn't save an extra row name column
+write_csv(new.elk.data, "data/clean.dt.elk.data.02.csv")
 #I downloaded this as a new data set into my Data folder and labeled it "clean.dt.elk.data.02" so i can upload it into my next rmd where I will determine the amount of time I want to pass before I record a new observation.
   
 ```
