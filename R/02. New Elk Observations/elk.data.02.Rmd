@@ -22,8 +22,11 @@ data.02 <- read_csv("data/clean.dt.elk.data.02.csv")
 
 ##**Exclude Addtional Columns That the csv File Read
 ```{r}
-data.02 <- data.02 %>%
-  select(time_diff,location)
+# The additional column was added because of the write.csv function in the 
+# previous Rmd (instead of write_csv). I suggest removing this code chunk 
+# because the additional columns from your original data frame are now present.
+# data.02 <- data.02 %>%
+#   select(time_diff,location)
 
 ```
 
@@ -31,7 +34,14 @@ data.02 <- data.02 %>%
 ```{r}
 new.obs <- data.02 %>%
   group_by(location) %>%
-  mutate(new.obs = time_diff > lag(1800))
-#The results from this show no new observations as the photos were not taken more then 30 minutes (1800s) apart. However we have to account for the first photo at each location taken as they will be new observations.
+  # This mutate adds a new column "observation" to capture the number of 
+  # obsservations within a camera. Since you already grouped by camera, it should
+  # operate by camera. The cumsum function goes sequentially throuhg all rows
+  # and asks if time_diff is greater than 1800. If it is, it gets a new
+  # observation number, so each observation greater than 1800 seconds becomes
+  # a new observation until the next new observation is encountered. I've also 
+  # added 1 to the cumsum because the first observation number is zero.
+  mutate(observation = cumsum(time_diff > 1800 & !is.na(time_diff)) + 1)
+
 ```
 
