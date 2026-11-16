@@ -1,0 +1,51 @@
+---
+title: "sunrise_sunset_data"
+author: "LN"
+date: "2026-11-16"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Load packages
+
+```{r}
+library(tidyverse)
+```
+
+### Load sunrise/sunset data
+
+```{r}
+read_table("data/sunrise_sunset_26.txt")
+```
+
+These data were generated from https://nrc.canada.ca/en/research-development/products-services/software-applications/sun-calculator/
+
+
+Using the calculator:
+
+* What would you like to calculate? (choose "Sunrise/sunset, full year (Civil Twilight)")
+* How would youu like to calculate it? (choose "By city")
+* Date (choose January 1st of the year)
+
+The really annoying thing is that the calculator only provides a web table, which you'll need to copy and paste into a spreadsheet or text file. Some of the column headings also need to be cleaned up so that they correspond to the correct columns and are formatted for R (i.e., no spaces between words in the column headings).
+
+Once cleaned up, the important data in the file are:
+
+* Month
+* Day
+* Civil_twilight_start (this is the start of the sunrise)
+* Sunrise (this is when the sun is fully above the horizon)
+* Sunset (this is the start of the sunset)
+* Civil_Twilight_end (this is when the sun is fully below the horizon)
+
+I would classify any photos as:
+
+* Morning twilight: falls between the start of civil twilight and sunrise
+* Evening twilight: falls between sunset and the end of civil twilight
+* Day: falls between sunrise and sunset
+* Night: falls between the end of civil twilight and the start of civil twilight the following day (most easily done as later than end of civil twilight OR before start of civil twilight)
+
+
