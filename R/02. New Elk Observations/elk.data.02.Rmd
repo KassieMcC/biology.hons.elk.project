@@ -38,7 +38,8 @@ new.obs <- data.02 %>%
 ##**Visualizing Data
 ```{r}
 ggplot(new.obs, aes(x = hour)) + 
-  geom_freqpoly() + 
+  geom_density() + # Creates a density plot
+  # geom_freqpoly() + 
   theme_minimal()
 ```
 
