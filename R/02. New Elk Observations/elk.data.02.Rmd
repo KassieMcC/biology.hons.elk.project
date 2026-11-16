@@ -20,16 +20,6 @@ data.02 <- read_csv("data/clean.dt.elk.data.02.csv")
 
 ```
 
-##**Exclude Addtional Columns That the csv File Read
-```{r}
-# The additional column was added because of the write.csv function in the 
-# previous Rmd (instead of write_csv). I suggest removing this code chunk 
-# because the additional columns from your original data frame are now present.
-# data.02 <- data.02 %>%
-#   select(time_diff,location)
-
-```
-
 ##**Creating New Observations at >30 mins (1800s)
 ```{r}
 new.obs <- data.02 %>%
@@ -43,5 +33,12 @@ new.obs <- data.02 %>%
   # added 1 to the cumsum because the first observation number is zero.
   mutate(observation = cumsum(time_diff > 1800 & !is.na(time_diff)) + 1)
 
+```
+
+##**Visualizing Data
+```{r}
+ggplot(new.obs, aes(x = hour)) + 
+  geom_freqpoly() + 
+  theme_minimal()
 ```
 

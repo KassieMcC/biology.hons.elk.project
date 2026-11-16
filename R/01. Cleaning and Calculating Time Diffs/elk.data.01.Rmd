@@ -28,7 +28,7 @@ library(tidyverse)
 # the two current csv files. These might eventually
 # become too large to share via GitHub, but this
 # will work for now and allow us to collaborate better.
-data <- read_csv("data/ASCCA_2026_June_August_tag_report.csv")
+data <- read_csv("data/ASCCA_2026_June_September_tag_report.csv")
 
 ```
 
