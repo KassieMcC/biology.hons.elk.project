@@ -45,6 +45,48 @@ data.clean <- data %>%
 
 ```
 
+##**Importing Sunrise/Sunset Data
+```{r}
+sun.data <- read_csv("data/sunrise_sunset_2026.csv")
+```
+
+##**Cleaning Sunrise/Sunset Data
+```{r}
+sun.data.clean <- sun.data %>%
+  rename(month = Month, day = Day, civil_twilight_start = Civil_Twilight_start, sunrise = Sunrise, local_noon = Local_noon, sunset = Sunset, civil_twilight_end = Civil_Twilight_end) %>%
+  select(month, day, civil_twilight_start, sunrise, local_noon, sunset, civil_twilight_end) %>%
+  mutate(month = match(substr(month, 1,3), month.abb))
+```
+
+##**Combining Sunrise/Sunset Data to data.clean
+```{r}
+data.clean <- data.clean %>%
+  left_join(sun.data.clean, by = c("month", "day"))
+```
+
+##**Classifying Photos into Categories Based on Sunrise/Sunset Data
+```{r}
+data.clean <- data.clean %>%
+  mutate(
+    time_period = case_when(
+      hms::as_hms(image_date_time) >= civil_twilight_start &
+      hms::as_hms(image_date_time) < sunrise ~ "Morning twilight",
+      hms::as_hms(image_date_time) >= sunrise &
+        hms::as_hms(image_date_time) < sunset ~ "Day",
+      hms::as_hms(image_date_time) >= sunset &
+        hms::as_hms(image_date_time) < civil_twilight_end ~ "Evening twilight",
+      hms::as_hms(image_date_time) >= civil_twilight_end |
+        hms::as_hms(image_date_time) < civil_twilight_start ~ "Night"))
+```
+* Civil_twilight_start (this is the start of the sunrise)
+* Sunrise (this is when the sun is fully above the horizon)
+* Sunset (this is the start of the sunset)
+* Civil_Twilight_end (this is when the sun is fully below the horizon)
+
+* Morning twilight: falls between the start of civil twilight and sunrise
+* Evening twilight: falls between sunset and the end of civil twilight
+* Day: falls between sunrise and sunset
+* Night: falls between the end of civil twilight and the start of civil twilight the following day
 
 ##**Creating Function To Caclulate Time Difference Between Photos
 ```{r}

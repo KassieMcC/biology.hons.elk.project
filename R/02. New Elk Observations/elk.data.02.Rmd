@@ -17,7 +17,6 @@ library(tidyverse)
 ##**Loading Data Made in Last Rmd
 ```{r}
 data.02 <- read_csv("data/clean.dt.elk.data.02.csv")
-
 ```
 
 ##**Creating New Observations at >30 mins (1800s)
@@ -37,9 +36,11 @@ new.obs <- data.02 %>%
 
 ##**Visualizing Data
 ```{r}
-ggplot(new.obs, aes(x = hour)) + 
-  geom_density() + # Creates a density plot
-  # geom_freqpoly() + 
-  theme_minimal()
+ggplot(new.obs, aes(x = hour, colour = time_period, fill = time_period)) +
+  geom_density (alpha = 0.2) +
+  theme_minimal() +
+  labs(x = "Hour of Day",
+    y = "Density")
 ```
+
 
