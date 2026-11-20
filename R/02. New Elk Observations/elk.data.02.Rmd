@@ -43,4 +43,15 @@ ggplot(new.obs, aes(x = hour, colour = time_period, fill = time_period)) +
     y = "Density")
 ```
 
+Try a bar chart to count the number of observations by each time period. I think this would be a cool visualization to compare between time periods when we have all the data---i.e., one plot for pre-hunting, one plot for archery, and one for rifle.
+
+I think then you would want to just plot the density plot by hour of day rather than colouring by time of day.
+
+```{r}
+ggplot(new.obs, aes(time_period, fill = time_period)) +
+  geom_bar() +
+  theme_minimal() +
+  labs(x = "Time period",
+    y = "Total number of observations")
+```
 
